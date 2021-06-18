@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\DependencyInjection;
 
-use EventSauce\EventSourcing\Consumer;
+use EventSauce\EventSourcing\MessageConsumer;
 use Exception;
 use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\JphooiveldEventSauceExtension;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +38,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
         self::assertSame('jphooiveld_eventsauce.message_repository.doctrine', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
         self::assertSame('jphooiveld_eventsauce.payload_serializer.constructing', (string)$configuration->getAlias('jphooiveld_eventsauce.payload_serializer'));
         self::assertSame('jphooiveld_eventsauce.message_serializer.constructing', (string)$configuration->getAlias('jphooiveld_eventsauce.message_serializer'));
-        self::assertSame('jphooiveld_eventsauce.upcaster.delegating', (string)$configuration->getAlias('jphooiveld_eventsauce.upcaster'));
+        self::assertSame('jphooiveld_eventsauce.upcaster.chain', (string)$configuration->getAlias('jphooiveld_eventsauce.upcaster'));
     }
 
     /**
@@ -71,9 +71,9 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
 
         $autoConfiguration = $configuration->getAutoconfiguredInstanceof();
 
-        self::assertArrayHasKey(Consumer::class, $autoConfiguration);
+        self::assertArrayHasKey(MessageConsumer::class, $autoConfiguration);
 
-        $definition = $autoConfiguration[Consumer::class];
+        $definition = $autoConfiguration[MessageConsumer::class];
 
         self::assertTrue($definition->hasTag('eventsauce.consumer'));
     }
@@ -96,9 +96,9 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
 
         $autoConfiguration = $configuration->getAutoconfiguredInstanceof();
 
-        self::assertArrayHasKey(Consumer::class, $autoConfiguration);
+        self::assertArrayHasKey(MessageConsumer::class, $autoConfiguration);
 
-        $definition = $autoConfiguration[Consumer::class];
+        $definition = $autoConfiguration[MessageConsumer::class];
 
         self::assertTrue($definition->hasTag('messenger.message_handler'));
 

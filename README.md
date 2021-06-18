@@ -157,7 +157,7 @@ EventSauce has a number of interfaces that are auto configured when this bundle 
 ### Consumers
 
 Consumers are responsible for handling events from the aggregates. The message dispatcher is responsible for delegating the
-events to the consumers. Every class you create and implements **EventSauce\EventSourcing\Consumer** will automatically 
+events to the consumers. Every class you create and implements **EventSauce\EventSourcing\MessageConsumer** will automatically 
 receive events from the message dispatcher. However, if you intent to use Symfony messenger you must implement the __invoke
 method. To overcome this limitation you can use the **ConsumableTrait** provided in the bundle. This will make sure it will work
 with the default message dispatcher from EventSauce as wel as the symfony messenger component. The trait will also let consumer's
@@ -171,10 +171,10 @@ want to send an email notifcation. For example, we can create a listener as foll
 namespace App\Service;
 
 use App\Event\OrderCreated;
-use EventSauce\EventSourcing\Consumer;
+use EventSauce\EventSourcing\MessageConsumer;
 use Jphooiveld\Bundle\EventSauceBundle\ConsumableTrait;
 
-class SendMailNotification implements Consumer
+class SendMailNotification implements MessageConsumer
 {
         use ConsumableTrait;
         

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\DependencyInjection;
 
-use EventSauce\EventSourcing\Consumer;
+use EventSauce\EventSourcing\MessageConsumer;
 use EventSauce\EventSourcing\MessageDecorator;
-use EventSauce\EventSourcing\Upcasting\DelegatableUpcaster;
+use EventSauce\EventSourcing\Upcasting\UpcasterChain;
 use Exception;
 use LogicException;
 use Symfony\Component\Config\FileLocator;
@@ -43,12 +43,12 @@ final class JphooiveldEventSauceExtension extends Extension
 
             $loader->load('dispatcher_messenger.xml');
             $container->setAlias('jphooiveld_eventsauce.message_dispatcher', 'jphooiveld_eventsauce.message_dispatcher.messenger');
-            $container->registerForAutoconfiguration(Consumer::class)->addTag('messenger.message_handler', ['bus' => $config['messenger']['service_bus']]);
+            $container->registerForAutoconfiguration(MessageConsumer::class)->addTag('messenger.message_handler', ['bus' => $config['messenger']['service_bus']]);
 
             $definition = $container->getDefinition('jphooiveld_eventsauce.message_dispatcher.messenger');
             $definition->setArgument(0, new Reference($config['messenger']['service_bus']));
         } else {
-            $container->registerForAutoconfiguration(Consumer::class)->addTag('eventsauce.consumer');
+            $container->registerForAutoconfiguration(MessageConsumer::class)->addTag('eventsauce.consumer');
         }
 
         $container->setAlias('jphooiveld_eventsauce.message_repository', $config['message_repository']['service']);
@@ -85,6 +85,6 @@ final class JphooiveldEventSauceExtension extends Extension
         $container->setParameter('jphooiveld_eventsauce.message_repository.aggregates', $config['message_repository']['aggregates']);
         $container->setParameter('jphooiveld_eventsauce.time_of_recording.timezone', $config['time_of_recording']['timezone']);
         $container->registerForAutoconfiguration(MessageDecorator::class)->addTag('eventsauce.message_decorator');
-        $container->registerForAutoconfiguration(DelegatableUpcaster::class)->addTag('eventsauce.delegatable_upcaster');
+        $container->registerForAutoconfiguration(UpcasterChain::class)->addTag('eventsauce.delegatable_upcaster');
     }
 }
