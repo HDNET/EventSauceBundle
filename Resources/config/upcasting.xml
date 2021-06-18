@@ -10,7 +10,7 @@
 
         <service id="jphooiveld_eventsauce.upcaster" alias="jphooiveld_eventsauce.upcaster.chain"/>
 
-        <service id="jphooiveld_eventsauce.event_serializer.upcasting" class="EventSauce\EventSourcing\Serialization\UpcastingMessageSerializer" decorates="jphooiveld_eventsauce.message_serializer">
+        <service id="jphooiveld_eventsauce.event_serializer.upcasting" class="EventSauce\EventSourcing\Upcasting\UpcastingMessageSerializer" decorates="jphooiveld_eventsauce.message_serializer">
             <argument type="service" id="jphooiveld_eventsauce.event_serializer.upcasting.inner"/>
             <argument type="service" id="jphooiveld_eventsauce.upcaster"/>
         </service>
